@@ -11,21 +11,15 @@
 import sys
 if sys.version_info > (3, 0):
     import urllib.request as urllib2
-    import urllib.error
     from urllib.error import HTTPError
-    import urllib.parse as urllib
-    import html
     from http.client import HTTPException, BadStatusLine
 else:
     import urllib2
     from urllib2 import HTTPError
-    import urllib
-    from HTMLParser import HTMLParser
     from httplib import HTTPException, BadStatusLine
 
 import base64
 import time
-import datetime
 import uuid
 
 try:
