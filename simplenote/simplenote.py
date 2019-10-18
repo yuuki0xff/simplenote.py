@@ -125,9 +125,12 @@ class Simplenote(object):
         if version is not None:
             params_version = '/v/' + str(version)
 
+        token = self.get_token()
+        if token is None:
+            return Exception('failed to get token'), -1
         params = '/i/%s%s' % (str(noteid), params_version)
         request = Request(DATA_URL+params)
-        request.add_header(self.header, self.get_token())
+        request.add_header(self.header, token)
         try:
             response = urllib2.urlopen(request)
         except HTTPError as e:
@@ -181,8 +184,11 @@ class Simplenote(object):
 
         # TODO: Could do with being consistent here. Everywhere else is Request(DATA_URL+params)
         note_to_update = self.__remove_simplenote_api_fields(note_to_update)
+        token = self.get_token()
+        if token is None:
+            return Exception('failed to get token'), -1
         request = Request(url, data=json.dumps(note_to_update).encode('utf-8'))
-        request.add_header(self.header, self.get_token())
+        request.add_header(self.header, token)
         request.add_header('Content-Type', 'application/json')
 
         response = ""
@@ -267,8 +273,11 @@ class Simplenote(object):
             params += '&data=true'
 
         # perform initial HTTP request
+        token = self.get_token()
+        if token is None:
+            return Exception('failed to get token'), -1
         request = Request(DATA_URL+params)
-        request.add_header(self.header, self.get_token())
+        request.add_header(self.header, token)
         try:
             response = urllib2.urlopen(request)
             response_notes = json.loads(response.read().decode('utf-8'))
@@ -295,7 +304,7 @@ class Simplenote(object):
 
             # perform the actual HTTP request
             request = Request(DATA_URL+params)
-            request.add_header(self.header, self.get_token())
+            request.add_header(self.header, token)
             try:
                 response = urllib2.urlopen(request)
                 response_notes = json.loads(response.read().decode('utf-8'))
@@ -369,8 +378,11 @@ class Simplenote(object):
             return note, status
 
         params = '/i/%s' % (str(note_id))
+        token = self.get_token()
+        if token is None:
+            return Exception('failed to get token'), -1
         request = Request(url=DATA_URL+params, method='DELETE')
-        request.add_header(self.header, self.get_token())
+        request.add_header(self.header, token)
         try:
             response = urllib2.urlopen(request)
         except (IOError, BadStatusLine) as e:
